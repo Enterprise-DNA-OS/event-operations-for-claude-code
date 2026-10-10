@@ -27,7 +27,7 @@ try{
  for(const cmd of Object.keys(reads))await call(cmd);
  assert((await call('attention')).some(x=>x.kind==='speaker brief'));
  assert((await call('compliance')).some(x=>x.rule==='retention review'));
- assert.equal((await call('events')).find(x=>x.code==='HARBOUR').spaces,1);
+ assert.equal(Number((await call('events')).find(x=>x.code==='HARBOUR').spaces),1);
  assert.equal((await call('event','--event=harbour')).event.name,'Harbour Operations Forum');
  assert.equal((await call('weekly-review')).events.length,2);
  assert.equal((await call('help')).length,commands.length);

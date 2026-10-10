@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 import {getDb,REPO_ROOT} from './lib/db.mjs';
 import {parseCsv,pick} from './lib/csv.mjs';
+import {table as formatTable} from './lib/format.mjs';
 
 export const reads={
  events:'select code,name,starts_on,venue,capacity,confirmed,waiting,spaces from events.event_summary order by starts_on,code',
@@ -147,9 +148,7 @@ async function importSwoogo(db,e,o){
 export function display(value){
  if(Array.isArray(value)){
   if(!value.length)return 'No records.';const cols=Object.keys(value[0]);const str=v=>v===null?'':v instanceof Date?v.toISOString():typeof v==='object'?JSON.stringify(v):String(v);
-  const widths=cols.map(c=>Math.min(70,Math.max(c.length,...value.map(r=>str(r[c]).length))));
-  const line=r=>cols.map((c,i)=>str(r[c]).slice(0,widths[i]).padEnd(widths[i])).join(' | ');
-  return [line(Object.fromEntries(cols.map(c=>[c,c]))),widths.map(w=>'-'.repeat(w)).join('-+-'),...value.map(line)].join('\n');
+  return formatTable(value,cols.map(key=>({key,label:key.replaceAll('_',' '),width:70,format:str})));
  }
  if(value&&typeof value==='object')return Object.entries(value).map(([k,v])=>`${k}:\n${Array.isArray(v)?display(v):typeof v==='object'?JSON.stringify(v,null,2):String(v)}`).join('\n\n');
  return String(value);

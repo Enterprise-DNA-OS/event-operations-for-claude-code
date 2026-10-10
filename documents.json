@@ -1,11 +1,59 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
+    "name": "run-sheet",
+    "title": "Event run sheet",
+    "for_each": "select id,name from events.events order by starts_on",
     "file": "name",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Event",
+        "sql": "select name,starts_on,ends_on,timezone,venue,owner from events.events where id=$1"
+      },
+      {
+        "title": "Sessions (UTC)",
+        "sql": "select name,room,starts_at,ends_at,speaker,booked from events.session_capacity where event_id=$1 order by starts_at,room"
+      }
+    ]
+  },
+  {
+    "name": "speaker-brief",
+    "title": "Speaker briefing checklist",
+    "for_each": "select id,name from events.events order by starts_on",
+    "file": "name",
+    "sections": [
+      {
+        "title": "Speakers",
+        "sql": "select name,owner,brief_due,brief_received from events.speakers where event_id=$1 order by name"
+      },
+      {
+        "title": "Programme (UTC)",
+        "sql": "select name,room,starts_at,ends_at,speaker from events.session_capacity where event_id=$1 order by starts_at"
+      }
+    ]
+  },
+  {
+    "name": "sponsor-delivery",
+    "title": "Sponsor fulfilment record",
+    "for_each": "select id,name from events.events order by starts_on",
+    "file": "name",
+    "sections": [
+      {
+        "title": "Commitments",
+        "sql": "select sponsor,item,owner,due_on,status,evidence from events.deliverables where event_id=$1 order by sponsor,due_on"
+      }
+    ]
+  },
+  {
+    "name": "attendance-sheet",
+    "title": "Attendance sheet: internal use",
+    "for_each": "select id,name from events.events order by starts_on",
+    "file": "name",
+    "sections": [
+      {
+        "title": "Registrations",
+        "note": "Contains personal information. Share only with authorised event staff.",
+        "sql": "select name,company,status,checked_in_at from events.registrants where event_id=$1 and status='confirmed' order by name"
+      }
     ]
   }
 ]

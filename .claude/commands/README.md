@@ -1,5 +1,3 @@
-# Slash commands
+# Recurring event jobs
 
-One file per recurring job. Each command tells Claude Code exactly which CLI command to run and how to present the result, so the operator never re-explains the job.
-
-Add a command every time the same ask comes twice. Frontmatter needs a `description:` line. The body is the brief.
+This is the single command library for every coding agent. Read CLAUDE.md, then the named recipe. There are 35 recipes, including customise and new-view. Use current CLI results in every answer.

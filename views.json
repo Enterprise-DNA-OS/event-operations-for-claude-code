@@ -1,13 +1,30 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Event Operations for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Event operations this week",
+    "subtitle": "Fictional records until replaced. Read-only snapshot.",
     "sections": [
       {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "title": "Event places",
+        "sql": "select code,name,starts_on,capacity,confirmed,waiting,spaces from events.event_summary order by starts_on"
+      },
+      {
+        "title": "Outstanding commitments",
+        "sql": "select * from events.attention order by due_on"
+      },
+      {
+        "title": "Record reviews",
+        "sql": "select * from events.compliance order by code,rule"
+      }
+    ]
+  },
+  {
+    "name": "programme",
+    "title": "Programme and session capacity",
+    "sections": [
+      {
+        "title": "Run sheet",
+        "sql": "select code,name,room,starts_at,ends_at,speaker,booked,spaces from events.session_capacity order by starts_at,room"
       }
     ]
   }
